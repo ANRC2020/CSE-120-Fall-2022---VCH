@@ -1,0 +1,20 @@
+using System;
+using System.IO;
+using System.Text;
+
+class Test
+{
+    public static void Main()
+    {
+	/*Position */
+        string path = @"c:\temp\PatientArmLength.txt";
+
+	FileReader("file.txt");
+
+	string readText = File.ReadAllText(path);
+
+	string path2 = 	@"c:\temp\PatientArmLength.json";
+
+        File.WriteAllText(path2, readText);
+    }
+}

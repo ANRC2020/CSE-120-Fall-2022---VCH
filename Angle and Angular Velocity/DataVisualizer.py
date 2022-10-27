@@ -28,9 +28,12 @@ def visualize_movement(shoulder, hand, num_entry):
     Z_data = np.array([float(shoulder[2]), float(hand[2])])
 
     # Calculate the euclidiean distance from the shoulder, (x1, y1, z1), to the hand, (x2, y2, z2)
-    norm_v = sqrt((X_data[1] - X_data[0])**2 + (Y_data[1] - Y_data[0])**2 + (Z_data[1] - Z_data[0])**2)
+    norm_v = sqrt((X_data[1] - X_data[0])**2 + (Y_data[1] - Y_data[0])**2 + (Z_data[1] - Z_data[0])**2) 
 
     # Check system feasibilty
+
+    print(f"Distance: {norm_v} Shoulder: {shoulder} Hand: {hand}\n")
+
     if(norm_v > l1 + l2):
         raise Exception("System not possible (out of max reach); Suggested to increase l1, l2 or choose new points\n")
 
@@ -97,11 +100,11 @@ df = pd.DataFrame(columns=['x','y','z'])
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 
-l1 = 5
-l2 = 6
+l1 = 0.4
+l2 = 0.4
 
 # Set the shoulder's position
-shoulder = [0,0,0]
+shoulder = [0.61,0.58,-0.85]
 
 with open(path, 'r') as f:
     for i, row in enumerate(f):
@@ -111,7 +114,7 @@ with open(path, 'r') as f:
         print(row)
 
         for j, entry in enumerate(row):
-            row[j] = 10*float(entry)
+            row[j] = float(entry)
 
         print(row)
 

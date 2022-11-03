@@ -64,8 +64,8 @@ def start():
    return render_template("main_landing.html") #jsonify(grades_dict)
 
 # Enter Patient ID Page
-@app.route('/patient_selection')
-def patient_selection():
+@app.route('/pat_select')
+def pat_select():
    return render_template('patient_selection.html')
 
 # Report Selection HTML Page

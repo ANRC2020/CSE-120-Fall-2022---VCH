@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Valley CHildren's Hostpital</title>
+        <title>Valley Children's Hostpital</title>
+        <script>
+            function RedirectBack(){
+                location.replace("patient_selection.html");
+            }
+            function RedirectExamSelection(){
+                location.replace("single_report.html");
+            }
+        </script>
     </head>
     <body>
         <h1>Report Gen Page</h1>
         <h3>description of this page and each button</h3>
-        <a href="./single_report.html">
-            <button>Single Exam Report</button>
-        </a>
+        
+
+        <button type="button" class='btn' onClick="RedirectExamSelection()">Single Exam Report</button>
+        <button type="button" class='btn' onClick="RedirectBack()">BACK</button>
         
     </body>
 </html>

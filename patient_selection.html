@@ -2,18 +2,22 @@
 <html>
     <head>
         <title>Valley Children's Hospital</title>
+        <script>
+            function RedirectHome(){
+                location.replace("main_landing.html");
+            }
+            function RedirectReportSelection(){
+                location.replace("report_selection.html");
+            }
+        </script>
     </head>
     <body>
         <h1>Enter the Patient ID:</h1>
         <label>Patient ID:</label>
-        <input type="text" value="Patient ID">
-        <a href="./report_selection.html">
-            <button>SUBMIT</button>
-        </a>
-        <!-- <input type="submit" value="SUBMIT"> -->
+        <input type="text" placeholder="Patient ID">
 
-        <a href="./main_landing.html">
-            <button>BACK</button>
-        </a>
+        <button type="button" class='btn' onClick="RedirectReportSelection()">SUBMIT</button>
+        <button type="button" class='btn' onClick="RedirectHome()">BACK</button>
+
     </body>
 </html>

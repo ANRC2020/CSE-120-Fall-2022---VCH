@@ -2,7 +2,13 @@
 <html>
     <head>
         <title>Valley Children's Hospital</title>
-        <sub></sub>
+        <script>
+            function RedirectPatientSelection(){
+                console.log("I'm here!")
+                location.replace("patient_selection.html");
+            }
+        </script>
+
     </head>
     <body>
         <h1>Hello Doctor!</h1>
@@ -12,9 +18,15 @@
         <p>Administer an Exam: Start the Unity UI for the Patient.</p>     
         <p>Generate a Report: Select a Patient in order to generate a report</p>
 
-        <a href="./patient_selection.html">
+        <!-- <a href="./patient_selection.html">
             <button> Generate a Report</button>
-        </a>
-        <button type="button">Administer an Exam</button>
+        </a> -->
+            <button type="button" class='btn' onClick="RedirectPatientSelection()">Generate Report</button>
+            <button type="button" class='btn' onClick="RedirectPatientSelection()">Administer an Exam</button>
+
+        
+
+
+        <!-- <button type="button">Administer an Exam</button> -->
     </body>
 </html>

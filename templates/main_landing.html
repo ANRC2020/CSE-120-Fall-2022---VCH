@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Valley Children's Hospital</title>
+        <sub></sub>
+    </head>
+    <body>
+        <h1>Hello Doctor!</h1>
+        <h3>Select below an action you would like to perform.</h3>
+        <br>
+        <br>
+        <p>Administer an Exam: Start the Unity UI for the Patient.</p>     
+        <p>Generate a Report: Select a Patient in order to generate a report</p>
+
+        <!-- <a href="./patient_selection.html">
+            <button> Generate a Report</button>
+        </a> -->
+        <form action={{ url_for('patient_selection') }}>
+            <button type="submit" class='btn'>Generate Report</button>
+        </form>
+        <form action={{ url_for('patient_selection') }}>
+            <button type="submit" class='btn'>Administer an Exam</button>
+        </form>
+        <!-- <button type="button">Administer an Exam</button> -->
+    </body>
+</html>

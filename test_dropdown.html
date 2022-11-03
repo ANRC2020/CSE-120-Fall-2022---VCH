@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Test Session | Task Dropdown</title>
+        <link rel="stylesheet" href="styleSheet.css">
+    </head>
+
+
+    <body>
+        <h1>Task Selection for Patient</h1>
+
+        <div class="patient_test">
+            <label for="task_search">Search for Task:</label>
+            <input type="text" id="task_search" placeholder="Search..."/>
+            <br>
+            <a href="./select_test_patient.html">
+                <button>BACK</button>
+            </a>
+
+            <a href="./begin_vr_page.html">
+                <button>CONTINUE</button>
+            </a>
+            <br><br>
+        </div>
+
+
+        <div class="task_one">
+            <img src="elbow_flexion.gif" alt="Elbow Flexion" style="width:300px;height:300px;"/>
+            <br>
+            <button id="elbow_flexion_select">SELECT</button>
+        </div>
+        <br><br>
+        <div class="btn-group" style="height:100px;overflow:auto;">
+            <input type="radio">Exam 1</input><br>
+            <input type="radio">Exam 2</input><br>
+            <input type="radio">Exam 3</input><br>gi
+            <input type="radio">Exam 4</input><br>
+            <input type="radio">Exam 5</input><br>
+            <input type="radio">Exam 6</input><br>
+
+             <!-- <ul>
+                {% for exam in Exams %}
+                <li> {{ exam }}</li>
+                {% endfor %}
+            </ul> -->
+        </div> 
+
+    </body>
+</html>

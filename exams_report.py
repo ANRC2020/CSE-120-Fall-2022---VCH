@@ -73,11 +73,11 @@ def patient_selection():
 def rep_select():
    return render_template('report_selection.html')
 
-# Show all exams of single patient
-@app.route('<int:patID>/rep_sel/exams', methods=['GET'])
-def exams(patID):
-   exms = Exams.query.all(Exams.pat_ID==patID)
-   return render_template('exam_selection.html', exams=exms)
+# # Show all exams of single patient
+# @app.route('<int:patID>/rep_sel/exams', methods=['GET'])
+# def exams(patID):
+#    exms = Exams.query.all(Exams.pat_ID==patID)
+#    return render_template('exam_selection.html', exams=exms)
 
 
 

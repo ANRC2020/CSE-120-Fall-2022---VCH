@@ -2,19 +2,28 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import math
-from math import sqrt, acos, asin, sin, atan, cos
+from math import sqrt, acos, asin, sin, atan, cos, pi
+import json
 
 # Set the lengths of upper and lower arms
 global l1
 global l2
 global prev_angle
 
+def euclidean_distance(point_1, point_2):
+    
+    distance = sqrt((point_1[0] - point_2[0])**2 + (point_1[1] - point_2[1])**2 + (point_1[2] - point_2[2])**2)
+
+    return distance
+
+
 def law_cosine(a, b, c):
-    print((c**2 - a**2 - b**2)/(-2*a*b))
+    # print((c**2 - a**2 - b**2)/(-2*a*b))
     return math.degrees(acos((c**2 - a**2 - b**2)/(-2*a*b)))
 
 def angular_velocity(prev_angle, curr_angle, delta_t):
-    return abs((curr_angle - prev_angle)/delta_t)
+    radians = ((curr_angle - prev_angle)/180)*pi
+    return abs(radians/delta_t)
 
 def visualize_movement(shoulder, hand, num_entry):
 
@@ -32,7 +41,7 @@ def visualize_movement(shoulder, hand, num_entry):
 
     # Check system feasibilty
 
-    print(f"Distance: {norm_v} Shoulder: {shoulder} Hand: {hand}\n")
+    # print(f"Distance: {norm_v} Shoulder: {shoulder} Hand: {hand}\n")
 
     if(norm_v > l1 + l2):
         raise Exception("System not possible (out of max reach); Suggested to increase l1, l2 or choose new points\n")
@@ -46,7 +55,7 @@ def visualize_movement(shoulder, hand, num_entry):
     # Solve for theta 3 given theta 1 and 2
     theta_3 = 180 - (theta_1 + theta_2)
 
-    print(theta_1, theta_2, theta_3)
+    # print(theta_1, theta_2, theta_3)
 
     
     if num_entry != 0:
@@ -93,39 +102,103 @@ def visualize_movement(shoulder, hand, num_entry):
 ##########################################################################################################################
 
 # Get Hand's Positional Data
-path = r"C:\Users\siddi\OneDrive\Desktop\VR Data\right_positions.txt"
+
+# Position of the 3 joints
+arm_points_path = r"C:/Users/siddi/AppData/LocalLow/DefaultCompany/CSE-120-Fall-120-VCH/PositionData.json"
+
+points = []
+
+with open(arm_points_path, 'r') as f:
+
+    arr = []
+
+    for i, row in enumerate(f):
+        my_dict = json.dumps(row)
+
+        if("x" in my_dict or "y" in my_dict or "z" in my_dict):
+            
+            position = ""
+
+            for char in my_dict:
+                try:
+                    if char == ".":
+                        position += char
+                        continue
+
+                    temp = str(int(char))
+                    position += temp
+                except:
+                    pass
+            
+            if len(arr) < 3:
+                arr.append(float(position))
+            else:
+                points.append(arr)
+                arr = []
+                arr.append(float(position))
+
+    points.append(arr)
+
+# Calculate the distance of the upper and lower arms
+
+l1 = euclidean_distance(points[0], points[1])
+l2 = euclidean_distance(points[1], points[2])
+
+# print(l1, l2)
+
+# Object's Positional Data
+object_position_path = r"C:/Users/siddi/AppData/LocalLow/DefaultCompany/CSE-120-Fall-120-VCH/ObjectPositionData.json"
 
 df = pd.DataFrame(columns=['x','y','z'])
 
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 
-l1 = 0.4
-l2 = 0.4
-
 # Set the shoulder's position
-shoulder = [0.61,0.58,-0.85]
+shoulder = points[0]
 
-with open(path, 'r') as f:
+# Get the position of the hand
+hand_positions = []
+
+with open(object_position_path, 'r') as f:
+
+    arr = []
+
     for i, row in enumerate(f):
-        row  = row.split(';')
-        row[-1] = row[-1][0:len(row[-1]) - 1]
+        my_dict = json.dumps(row)
 
-        print(row)
+        if("x" in my_dict or "y" in my_dict or "z" in my_dict):
+            
+            position = ""
 
-        for j, entry in enumerate(row):
-            row[j] = float(entry)
+            for char in my_dict:
+                try:
+                    if char == ".":
+                        position += char
+                        continue
 
-        print(row)
+                    temp = str(int(char))
+                    position += temp
+                except:
+                    pass
+            
+            if len(arr) < 3:
+                arr.append(float(position))
+            else:
+                hand_positions.append(arr)
+                arr = []
+                arr.append(float(position))
 
-        # Set the postion of the hand
-        hand = row
-        
-        visualize_movement(shoulder, hand, i)
+    hand_positions.append(arr)
 
-        print("\n")
+# print(hand_positions)
 
-        # ax.plot([k, k*k], [k, k*k], [k, k*k])
-        plt.draw()
-        plt.pause(1)
-        ax.cla()
+for i, row in enumerate(hand_positions):
+    # Set the postion of the hand
+    hand = row
+    
+    visualize_movement(shoulder, hand, i)
+    
+    plt.draw()
+    plt.pause(1)
+    ax.cla()

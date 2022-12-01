@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HOME - Valley Children's Hospital</title>
+        <!-- Styling -->
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+
+        <!-- Quick Redirects that don't interact with API -->
+        <script>
+            function RedirectPatientSelection()
+            {
+                location.replace("./report_part1.html");
+            }
+            function RedirectExamStart()
+            {
+                location.replace("./exam_part1.html")
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Nav Bar for quick navigation -->
+        <div class="nav">
+            <form method="GET"> 
+               <!-- <input type="search" class="searchbar" name="search" placeholder="Search title, author, or keyword..." size="40">
+               <button type="submit">Search</button> -->
+               <a href={{url_for('start')}}>Home</a>
+               <a href={{url_for('Login')}}>Login</a>
+               <a href={{url_for('Register')}}>Register</a>
+            </form> 
+        </div>
+
+        <!-- Main Content for Doctor -->
+        <div class="main">
+            <h1>V-ARM</h1>
+            
+            <!-- Two Options (REPORT or EXAM) -->
+            <table>
+                <tr>
+                    <th>Generate Report</th>
+                    <th>Administer Exam</th>
+                </tr>
+                <tr>
+                    <td>
+                        View the results of an exam. Export the report as a PDF or view within the window.
+                        <br><br>
+                        <button type="button" onClick="RedirectPatientSelection()">Generate Report</button>
+                        <br><br>
+                    </td>
+                    <td>
+                        Begin the VR examination. The results will be shown before pushing to the database. 
+                        <br><br>
+                        (<i>Note: An exam must be completed before viewing the exam's report</i>)
+                        <br><br>
+                        <button type="button" onClick="RedirectExamStart()">Administer Exam</button>
+                        <br><br>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+            <!-- <p><a href="mailto:hege@example.com">hege@example.com</a></p> -->
+        </footer> 
+    </body>
+</html>

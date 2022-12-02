@@ -4,6 +4,7 @@ import numpy as np
 import math
 from math import sqrt, acos, asin, sin, atan, cos, pi
 import json
+import time
 
 # Set the lengths of upper and lower arms
 global l1
@@ -24,7 +25,7 @@ def angular_velocity(prev_angle, curr_angle, delta_t):
     radians = ((curr_angle - prev_angle)/180)*pi
     return abs(radians/delta_t)
 
-def visualize_movement(shoulder, hand, num_entry):
+def visualize_movement(shoulder, hand, num_entry, x_bound, y_bound, z_bound):
 
     global l1
     global l2
@@ -63,37 +64,63 @@ def visualize_movement(shoulder, hand, num_entry):
     else:
         prev_angle = theta_3
 
+    #####################################################################################
+    
+    # 2D PLOT
+
     # Plot the Shoulder and End of Arm Points
-    ax.scatter3D(X_data, Y_data, Z_data, c=Z_data, cmap='Spectral')
 
-    # Plot a line from the shoulder to the end of arm
-    # ax.plot([X_data[0], X_data[1]], [Y_data[0], Y_data[1]], [Z_data[0], Z_data[1]])
+    azimuths = np.radians(np.linspace(90, theta_3 + 90, 20))
+    zeniths = np.arange(0, 70, 10)
 
-    # Solve for the endpoints of l1 (shoulder to elbow)
-    m = (Y_data[1] - Y_data[0])/(X_data[1] - X_data[0])
-    a = 1 + m**2
-    b = -2*X_data[0] - 2*(m**2)*X_data[0]
-    c = X_data[0]**2 + (m**2)*(X_data[0]**2) - l1**2
+    r, theta = np.meshgrid(zeniths, azimuths)
+    values = np.random.random((azimuths.size, zeniths.size))
 
-    X_Sol = [(-b + sqrt(b**2 - 4*a*c))/(2*a), (-b - sqrt(b**2 - 4*a*c))/(2*a)]
-    Y_Sol = [m*(X_Sol[0] - X_data[0]) + Y_data[0], m*(X_Sol[1] - X_data[0]) + Y_data[0]]
+    #-- Plot... ------------------------------------------------
+    # fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+    ax.contourf(theta, r, values)
 
-    # Choose the point closest to the end of arm
-    best_point = []
-    distance = l1 + l2
+    # plt.show()
 
-    for i in range(2):
-        if(sqrt((X_data[1] - X_Sol[i])**2 + (Y_data[1] - Y_Sol[i])**2) < distance):
-            best_point = [X_Sol[i], Y_Sol[i], Z_data[0]]
-            distance = sqrt((X_data[1] - X_Sol[i])**2 + (Y_data[1] - Y_Sol[i])**2)
+    #####################################################################################
 
-    # Plot the upper and lower arms
-    ax.plot([X_data[0], best_point[0]], [Y_data[0], best_point[1]], [Z_data[0], Z_data[0]])
-    ax.plot([X_data[1], best_point[0]], [Y_data[1], best_point[1]], [Z_data[1], Z_data[0]])
+    # # 3D PLOT
 
-    # Label the shoulder, elbow, and end of hand
+    # # Plot the Shoulder and End of Arm Points
+    # ax.scatter3D(X_data, Y_data, Z_data, c=Z_data, cmap='Spectral')
+
+    # # Plot a line from the shoulder to the end of arm
+    # # ax.plot([X_data[0], X_data[1]], [Y_data[0], Y_data[1]], [Z_data[0], Z_data[1]])
+
+    # # Solve for the endpoints of l1 (shoulder to elbow)
+    # m = (Y_data[1] - Y_data[0])/(X_data[1] - X_data[0])
+    # a = 1 + m**2
+    # b = -2*X_data[0] - 2*(m**2)*X_data[0]
+    # c = X_data[0]**2 + (m**2)*(X_data[0]**2) - l1**2
+
+    # X_Sol = [(-b + sqrt(b**2 - 4*a*c))/(2*a), (-b - sqrt(b**2 - 4*a*c))/(2*a)]
+    # Y_Sol = [m*(X_Sol[0] - X_data[0]) + Y_data[0], m*(X_Sol[1] - X_data[0]) + Y_data[0]]
+
+    # # Choose the point closest to the end of arm
+    # best_point = []
+    # distance = l1 + l2
+
+    # for i in range(2):
+    #     if(sqrt((X_data[1] - X_Sol[i])**2 + (Y_data[1] - Y_Sol[i])**2) < distance):
+    #         best_point = [X_Sol[i], Y_Sol[i], Z_data[0]]
+    #         distance = sqrt((X_data[1] - X_Sol[i])**2 + (Y_data[1] - Y_Sol[i])**2)
+    
+    # # ax.set_xlim(x_bound)
+    # # ax.set_ylim(y_bound)
+    # # ax.set_zlim(z_bound)
+
+    # # Plot the upper and lower arms
+    # ax.plot([X_data[0], best_point[0]], [Y_data[0], best_point[1]], [Z_data[0], Z_data[0]])
+    # ax.plot([X_data[1], best_point[0]], [Y_data[1], best_point[1]], [Z_data[1], Z_data[0]])
+
+    # # Label the shoulder, elbow, and end of hand
     # ax.text(X_data[0], Y_data[0], Z_data[0],  f"Shoulder {round(theta_1, 3)}", color='k')
-    ax.text(best_point[0], best_point[1], best_point[2],  f"Elbow {round(theta_3, 3)}", color='k')
+    # ax.text(best_point[0], best_point[1], best_point[2],  f"Elbow {round(theta_3, 3)}", color='k')
     # ax.text(X_data[1], Y_data[1], Z_data[1],  f"End of Arm {round(theta_2, 3)}", color='k')
 
     # plt.show()
@@ -140,8 +167,13 @@ with open(arm_points_path, 'r') as f:
 
 # Calculate the distance of the upper and lower arms
 
-l1 = euclidean_distance(points[0], points[1])
-l2 = euclidean_distance(points[1], points[2])
+l1 = euclidean_distance(points[0], points[1]) + 0.3
+l2 = euclidean_distance(points[1], points[2]) + 0.3
+
+# print(l1, l2)
+
+# l1 = 0.7
+# l2 = 0.7
 
 # print(l1, l2)
 
@@ -150,8 +182,10 @@ object_position_path = r"C:/Users/siddi/AppData/LocalLow/DefaultCompany/CSE-120-
 
 df = pd.DataFrame(columns=['x','y','z'])
 
-fig = plt.figure()
-ax = plt.axes(projection='3d')
+# fig = plt.figure()
+# ax = plt.axes(projection='3d')
+
+fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
 
 # Set the shoulder's position
 shoulder = points[0]
@@ -192,12 +226,49 @@ with open(object_position_path, 'r') as f:
 
 # print(hand_positions)
 
+# Get the min-max of each dimension (x, y, z)
+
+x_min = 2147483647
+x_max = -2147483647
+y_min = 2147483647
+y_max = -2147483647
+z_min = 2147483647
+z_max = -2147483647
+
+for row in hand_positions:
+
+    if row[0] < x_min:
+        x_min = row[0]
+
+    if row[0] > x_max:
+        x_max = row[0]
+
+    if row[1] < y_min:
+        y_min = row[1]
+
+    if row[1] > y_max:
+        y_max = row[1]
+
+    if row[2] < z_min:
+        z_min = row[2]
+
+    if row[2] > z_max:
+        z_max = row[2]
+
+
+x_bound = [x_min - 0.1, x_max + 0.1]
+y_bound = [y_min - 0.1, y_max + 0.1]
+z_bound = [z_min - 0.1, z_max + 0.1]
+
+# print(x_bound, y_bound, z_bound)
+# time.sleep(2)
+
 for i, row in enumerate(hand_positions):
     # Set the postion of the hand
     hand = row
     
-    visualize_movement(shoulder, hand, i)
+    visualize_movement(shoulder, hand, i, z_bound, y_bound, x_bound)
     
     plt.draw()
-    plt.pause(1)
+    plt.pause(0.1)
     ax.cla()

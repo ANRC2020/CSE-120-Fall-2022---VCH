@@ -11,7 +11,7 @@ def exam_info():
 
 def exam_metrics():
     angle_flexion = metric_utils.getAngle()
-    velocity_flexion = metric_utils.getVelocity()
+    velocity_flexion = metric_utils.getVelocity(angle_flexion)
     strength_class = metric_utils.getStrengthClass()
 
     return angle_flexion, velocity_flexion, strength_class

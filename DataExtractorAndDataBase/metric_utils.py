@@ -18,7 +18,6 @@ def getTime(position_array, velocity_array):
     return s
 
 def getStrengthClass(theta):
-
     s = getTime()
     rating = 0
     
@@ -31,7 +30,7 @@ def getStrengthClass(theta):
     if (s >= 3):
         rating = rating+1
     
-    
+
     return 0
 
 

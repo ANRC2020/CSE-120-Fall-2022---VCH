@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Single Exam Report | Valley Children's Hospital</title>
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+
+        <style>
+            td {
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            i {
+                color: rgba(0, 0, 0, 0.625);
+            }
+        </style>
+
+        <!-- Quick Redirects that don't interact with API -->
+        <script>
+            function RedirectHome()
+            {
+                location.replace("./home.html");
+            }
+        </script>
+    </head>
+
+
+    <body>
+        <!-- Nav Bar for quick navigation -->
+        <div class="nav">
+            <form method="GET"> 
+                <!-- <input type="search" class="searchbar" name="search" placeholder="Search title, author, or keyword..." size="40">
+                <button type="submit">Search</button> -->
+                <a href={{url_for('start')}}>Home</a>
+                <a id="logo" href={{url_for('start')}}>V-ARM</a>
+                <a href={{url_for('Logout')}}>Logout</a>
+            </form> 
+        </div>
+
+        <!-- Main Content for Doctor -->
+        <div class="main">
+            <h1>V-ARM</h1>
+
+            <!-- Show the patients name where > "Patient Name?" < is written ? -->
+            <h2>Single Exam Report for: "Patient Name?"</h2> 
+            <!-- We probably won't need test type, just added from following figma example -->
+            <label>Test Type:</label> 
+            <input type="text" placeholder="Enter Test Type" id="pat_id">
+            <br><br>
+            <table>
+                <tr>
+                    <th>Angle Flexion</th>
+                    <th>Maximum Velocity</th>
+                    <th>Strength</th>
+                </tr>
+                <tr>
+                    <td>
+                        Maximum angle of flexion for "patient name?": <br>
+                        <input type="text" id="max-angle" readonly />
+                        <br><br>
+                        <i>(i) To view the patients arm path, click on the button below.</i> <br>
+                        <!-- graph doesn't need to show by pressing a button, we can make it show automatically -->
+                        <button type="button" onClick="ShowGraphGif()"> Show Graph of Arm Movement</button>
+                        <br><br>
+                    </td>
+                    <td>
+                        Maximum Velocity from Angle Flexion for "Patient Name?": <br>
+                        <input type="text" id="max-velocity" readonly />
+                        <br><br>
+                        <i>(i) This is the maximum angle achieved from flexing elbow from 
+                            the starting angle of 180 degrees. </i>
+                        <br><br>
+                    </td>
+                    <td>
+                        Strength Classification for "Patient Name?": <br>
+                        <input type="text" id="strength-class" readonly />
+                        <br><br>
+                        <i>(i) This is the strength classification based on patients results.</i>
+                        <br><br>
+                    </td>
+                </tr>
+                
+            </table>            
+            
+        </div>
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+        </footer> 
+    </body>
+</html>

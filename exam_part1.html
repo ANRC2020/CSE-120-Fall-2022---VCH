@@ -15,16 +15,16 @@
             {
                 var R = document.getElementById("ExamButton");
                 R.style.display = "block";
+                var T = document.getElementById("pat_id").value;
+                console.log(T);
+                document.getElementById("p_id").innerHTML = "Begin Exam for Patient ID: " + T;
+                document.getElementById("id").value = T;
             }
-            function ShowExams()
-            {
-                var E = document.getElementById("ExamsDiv");
-                E.style.display = "block";
+            function getPatID(){
+                var T = document.getElementById("pat_id").value;
+                return T;
             }
-            function ShowReportContent()
-            {
-                location.replace("./report_final.html");
-            }
+            
         </script>
 
     </head>
@@ -48,16 +48,16 @@
             <button type="button" class='btn' onClick="RedirectHome()">BACK</button>
         
             <div id="ExamButton" style="display:none">
-                <form action="{{url_for('Exam')}"> 
-                    <!-- <input type="button" class="btn" onClick="location.href='{{url_for('Exam')}';">Begin Exam</input>
-                    <a href={{url_for('Exam')}}>Begin Exam</a> -->
+                <h2 id="p_id"></h2>
+                <form action={{url_for('exam_start')}} method="POST">
+                    <h2 id="p_id"></h2>
+                    <input id="id" type="text">
                     <input class="btn" type="submit" value="Begin Exam">
-                </form> 
+                </form>
+                
             </div>
             
-            <!-- <div>
-                <button type="button" class="btn" onClick="{{url_for('start')}}">Begin Exam</button>
-            </div> -->
+            
         
         </div>
 

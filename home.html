@@ -43,7 +43,11 @@
                     <td>
                         View the results of an exam. Export the report as a PDF or view within the window.
                         <br><br>
-                        <button type="button" onClick="RedirectPatientSelection()">Generate Report</button>
+                        <form action={{url_for('report1')}}>
+                            <!-- <button type="button">Generate Report</button> -->
+                            <input class="btn" type="submit" value="Generate Report">
+                        </form>
+                        <!-- <button type="button" onClick="RedirectPatientSelection()">Generate Report</button> -->
                         <br><br>
                     </td>
                     <td>
@@ -51,7 +55,11 @@
                         <br><br>
                         (<i>Note: An exam must be completed before viewing the exam's report</i>)
                         <br><br>
-                        <button type="button" onClick="RedirectExamStart()">Administer Exam</button>
+                        <form action={{url_for('exam1')}}>
+                            <!-- <button type="button">Generate Report</button> -->
+                            <input class="btn" type="submit" value="Administer Exam">
+                        </form>
+                        <!-- <button type="button" onClick="RedirectExamStart()">Administer Exam</button> -->
                         <br><br>
                     </td>
                 </tr>

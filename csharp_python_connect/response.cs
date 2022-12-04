@@ -1,23 +1,19 @@
-using System;
+using System; 
+using System.IO;
+using System.Diagnostics;  
 
-class response {
-    static void printInfo(string name, int id) {
-    Console.WriteLine(name);
-    Console.WriteLine(id);
-    }
+namespace responses {
+    class Program {
+        static void Main(string[] args) {
+            
+            Console.WriteLine("This is from C#: ");
 
-    static Array generateArray() {
-        
-        int[] myNum = {10, 20, 30, 40}; 
-        return myNum;
-    }
+            for (int i = 0; i < args.Length; i++) // Loop through array
+            {
+                Console.WriteLine(args[i]);
+            }a
 
-    static public void Main(String[] args)
-    {
-        // dict = recieve();
-        printInfo("name", 0);
-        Array arr = generateArray();
-        Console.WriteLine(arr);
-        // send arr back to python program.
+            Console.WriteLine("Finished. ");
+        }
     }
 }

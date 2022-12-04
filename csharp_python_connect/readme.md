@@ -3,7 +3,7 @@
 
 ## Usage
 
-Run `response.cs` in macos terminal. 
+1. Create C# exe for `response.cs` in macos terminal. 
 Requirements:
 
 - VSCode C# Extension
@@ -13,3 +13,5 @@ Requirements:
 csc reponse.cs
 mono response.exe
 ```
+
+2. Run driver function: `main.py`

@@ -61,44 +61,55 @@ def start():
    #render the main landing  template
    return render_template("home.html")
 
-@app.route('/report/<id>/exams', methods=['GET', 'POST'])
-def exams_list(id):
-    ### ------ This is handled by Abbas
-    if request.method == 'POST':
-        exam = "query happens here to enter into database"
-        # create  exam object or have sql command
-        db.session.add(exam)
-        db.session.commit()
-        return render_template('')
-    else:
-        exams = Exams.query.filter(Exams.patient_ID==id).first()
+
+## Thsi method will return all fo the exams of a single patient
+## Pass through the patient id for all fo the exams query
+@app.route('/report/<p_id>/exams', methods=['GET', 'POST'])
+def exams_list(p_id):
+    if request.method == 'GET':
+        #p_id = request.form.get('pat_id')
+        exams = session.query(Exams.patient_ID==p_id)
+        print("Query 1: ", exams)
+        #Exams.query.filter(Exams.patient_ID==id).first()
         return render_template('report_part1.html', exams=exams)
 
-@app.route('/report/<id>/<exid>', methods=['GET'])
-def exam(id, exid):
-    exams = Exams.query.filter(Exams.patient_ID==id and Exams.exam_ID==exid).first()
-    return render_template('report_part1.html', exams=exams)
+## This method will return a single exam contents
+## Pass thorugh the patient id and the exam id for the query
+@app.route('/report/<p_id>/<exid>', methods=['GET'])
+def exam(p_id, exid):
+    #p_id = request.form.get('patient_id')
+    #exid = request.form.get('exam_id')
+    exam = session.query(Exams.exam_ID==exid)
+    #exams = Exams.query.filter(Exams.patient_ID==p_id and Exams.exam_ID==exid).first()
+    return exam
+    #return render_template('report_part1.html', exams=exams)
 
 ## ----- Start the Unity VR UI -----
-@app.route('/exam_start', methods=['GET', 'POST'])
-def exam_start():
-    p_id = request.form.get("id")
-    print("patint id = ",p_id)
-    ## ENTER SHREYA's CODE
-    #subprocess.run(['mono', 'home.exe'])
-    #subprocess.check_output(r"path to .exe", shell=False)
-    print("exam started")
+@app.route('/exam_start/<p_id>', methods=['POST'])
+def exam_start(p_id):
+    #p_id = request.form.get('patient_id')
+    print("patient id = ", p_id)
 
-    # return render_template('home.html')
+    ## ENTER SHREYA's CODE
+    # This launches a Unity exe application from command prompt with no additional string arguments
+    # Verified on Chloe's windows - works on Command prompt and powershell, not ubuntu
+    subprocess.Popen(r"C:\Users\chloe\Downloads\UOP1_ChopChop_08alpha_Win\OpenProjects_ChopChop_0_8\Chop Chop.exe", shell=True)
+    
+    # Return to the home page for report access
+    return render_template('report_final.html')
 
 ### ----- Navigation for pages -----
 @app.route('/report', methods=['GET'])
 def report1():
-    return render_template('report_part1.html')
+    exams = exams_list()
+    print(exams)
+    return render_template('report_part1.html', exams=exams)
 
 @app.route('/report2', methods=['GET'])
 def report2():
-    return render_template('report_final.html')
+    exams = exam()
+    print(exams)
+    return render_template('report_final.html', exam=exam)
 
 @app.route('/exam', methods=['GET'])
 def exam1():

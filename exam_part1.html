@@ -18,12 +18,12 @@
                 var T = document.getElementById("pat_id").value;
                 console.log(T);
                 document.getElementById("p_id").innerHTML = "Begin Exam for Patient ID: " + T;
-                document.getElementById("id").value = T;
+                document.getElementById("patient_id").innerHTML = T;
             }
-            function getPatID(){
-                var T = document.getElementById("pat_id").value;
-                return T;
-            }
+            // function getPatID(){
+            //     var T = document.getElementById("pat_id").value;
+            //     return T;
+            // }
             
         </script>
 
@@ -49,9 +49,11 @@
         
             <div id="ExamButton" style="display:none">
                 <h2 id="p_id"></h2>
-                <form action={{url_for('exam_start')}} method="POST">
+                <!-- TODO: NEED TO GET THE PATIENT ID FROM THE INPUT BOX -->
+                <!-- SAVE THE ID AS p_id BELOW TO PASS THORUGH TO PYTHON -->
+                <form action={{url_for('exam_start', p_id=234)}} method="POST">
                     <h2 id="p_id"></h2>
-                    <input id="id" type="text">
+                    <input id="patient_id" type="text" style="display:none;">
                     <input class="btn" type="submit" value="Begin Exam">
                 </form>
                 

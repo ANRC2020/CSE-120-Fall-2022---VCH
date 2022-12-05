@@ -18,21 +18,24 @@
             }
             function ShowExams(examType)
             {
-                if (examType === 1){
+                var E = document.getElementById("ExamsDiv");
+                if (examType == '1'){
                     var EBs = document.getElementsByClassName("exam_button");
+                    console.log("length of EBs = ", EBs.length)
                     for(var i=0; i< EBs.length; i++){
-                        EB.type = "radio";
+                        EBs[i].type = "radio";
                     }
                     
                 }
                 else{
                     var EBs = document.getElementsByClassName("exam_button");
                     for(var i=0; i< EBs.length; i++){
-                        EB.type = "checkbox";
+                        EBs[i].type = "checkbox";
                     }
                 }
-                var E = document.getElementById("ExamsDiv");
-                    E.style.display = "block";
+                E.style.display = "block";
+
+                
             }
             function ShowReportContent()
             {
@@ -86,7 +89,7 @@
                     <td>
                         Single Report displays the results of ONE (1) examination.
                         <br><br>
-                        <button type="button" onClick="ShowExams(1)">Single Report</button>
+                        <button type="button" onClick="return ShowExams('1')">Single Report</button>
                         <br><br>
                     </td>
                     <td>
@@ -102,7 +105,7 @@
                         <br><br>
                         (<i>Note: You will select TWO (2) exams from different patients for a comparison</i>)
                         <br><br>
-                        <button type="button" onClick="RedirectExamStart()">Comparative Report</button>
+                        <button type="button" onClick="ShowExams(2)">Comparative Report</button>
                         <br><br>
                     </td>
                 </tr>

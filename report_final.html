@@ -2,6 +2,15 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+        <script>
+            function ShowGraphGif()
+            {
+                var R = document.getElementById("gif");
+                R.style.display = "block";
+                var B = document.getElementById("gifButton");
+                B.value = "Hide Graph";
+            }
+        </script>
     </head>
 
     <body>
@@ -14,10 +23,56 @@
             </form> 
         </div>
 
-        <div id="gif">
-            <img src="./static/AngleAnim.gif" alt="Angle ANimation" >
+        <!-- Show the patients name where > "Patient Name?" < is written ? -->
+        <h2>Single Exam Report for: "Patient Name?"</h2> 
+        <!-- We probably won't need test type, just added from following figma example -->
+        <label>Test Type:</label> 
+        <input type="text" placeholder="Enter Test Type" id="pat_id">
+        <br><br>
+        <table>
+            <tr>
+                <th>Angle Flexion</th>
+                <th>Maximum Velocity</th>
+                <th>Strength</th>
+            </tr>
+            <tr>
+                <td>
+                    Maximum angle of flexion for "patient name?": <br>
+                    <input type="text" id="max-angle" readonly />
+                    <br><br>
+                    <i>(i) To view the patients arm path, click on the button below.</i> <br>
+                    <!-- graph doesn't need to show by pressing a button, we can make it show automatically -->
+                    <button type="button" id="gifButton" onClick="ShowGraphGif()" name="Show Graph of Arm Movement">Show Graph of Arm Movement</button>
+                    <br><br>
 
-        </div>
+                    <div id="gif" style="display:none;">
+                        <img src="./static/AngleAnim.gif" alt="Angle Animation">
+                    </div>
+                    <br><br>
+                </td>
+                <td>
+                    Maximum Velocity from Angle Flexion for "Patient Name?": <br>
+                    <input type="text" id="max-velocity" readonly />
+                    <br><br>
+                    <i>(i) This is the maximum angle achieved from flexing elbow from 
+                        the starting angle of 180 degrees. </i>
+                    <br><br>
+                </td>
+                <td>
+                    Strength Classification for "Patient Name?": <br>
+                    <input type="text" id="strength-class" readonly />
+                    <br><br>
+                    <i>(i) This is the strength classification based on patients results.</i>
+                    <br><br>
+                </td>
+            </tr>
+            
+        </table>            
+        
+    </div>
+
+
+        
 
 
         <footer>

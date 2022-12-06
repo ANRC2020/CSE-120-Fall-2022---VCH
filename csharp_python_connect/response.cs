@@ -7,13 +7,27 @@ namespace responses {
         static void Main(string[] args) {
             
             Console.WriteLine("This is from C#: ");
+            // Console.WriteLine("Patient Name: " + args[0]);
 
-            for (int i = 0; i < args.Length; i++) // Loop through array
-            {
-                Console.WriteLine(args[i]);
-            }a
+            executePython();
+            Console.WriteLine("Patient Name: " + args[0]);
+        }
+        public static void executePython() {
+            String FileName = "sub.py";
+            ProcessStartInfo ProcessInfo = new ProcessStartInfo("python3");
+            ProcessInfo.UseShellExecute = false;
+            ProcessInfo.RedirectStandardOutput = true;
+            ProcessInfo.Arguments = FileName;
 
-            Console.WriteLine("Finished. ");
+            Process myprocess = new Process(); 
+            myprocess.StartInfo = ProcessInfo;
+            myprocess.Start();
+
+            StreamReader myStreamReader = myprocess.StandardOutput;
+            String myString = myStreamReader.ReadLine();
+            myprocess.WaitForExit();
+            myprocess.Close();
+            Console.WriteLine("Value recieved from script: " + myString);
         }
     }
 }

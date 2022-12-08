@@ -7,10 +7,12 @@ namespace responses {
         static void Main(string[] args) {
             
             Console.WriteLine("This is from C#: ");
-            // Console.WriteLine("Patient Name: " + args[0]);
+
+            Console.WriteLine("Patient Name: " + args[0]);
+            Console.WriteLine("Patient ID: " + args[1]);
+        
 
             executePython();
-            Console.WriteLine("Patient Name: " + args[0]);
         }
         public static void executePython() {
             String FileName = "sub.py";

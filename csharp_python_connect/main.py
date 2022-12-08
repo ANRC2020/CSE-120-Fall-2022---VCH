@@ -2,9 +2,10 @@ import subprocess
 
 def main():
     name = input('What is the patients name? ')
-    # This runs a C# file given file path with string arguments
+    patient_id = '100'
+    # Thid =is runs a C# file given file path with string arguments
     # verified on Shreya's mac
-    subprocess.run(['mono', 'response.exe', name])
+    subprocess.run(['mono', 'response.exe', name, patient_id])
     
     # TODO: Get final Unity exe
     # TODO: Finalize/Verify string args to pass patient name

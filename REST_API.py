@@ -91,12 +91,10 @@ def exams_list(p_id):
 ## Pass thorugh the patient id and the exam id for the query
 @app.route('/report/<p_id>/<exid>', methods=['GET', 'POST'])
 def get_exam_report(p_id, exid):
-    if request.method == 'POST':
+    if request.method == 'GET':
         query = exams.select().where(exams.c.exam_ID==exid and exams.c.patient_ID==p_id)
         result = conn.execute(query)
         Exam = convert_dict(result)
-        print(Exam)
-        # return Exam
         return render_template('report_final.html', exam=Exam)
 
 '''
@@ -118,7 +116,10 @@ def exam_start(p_id):
     # This launches a Unity exe application from command prompt with no additional string arguments
     # Verified on Chloe's windows - works on Command prompt and powershell, not ubuntu
     subprocess.Popen(r"C:\Users\chloe\Desktop\VCH_Project\VR_Exam\UnityGame\CSE-120-Fall-120-VCH.exe", shell=True)
-    
+    subprocess.run(['python3', 'sub.py', p_id])
+    #'sub.py'  = replace with dataextraction path
+    #p_id = replace with patient id
+
     # Return to the home page for report access
     return render_template('report_final.html')
 

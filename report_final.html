@@ -2,60 +2,24 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../static/style.css"/>
-        <script>
-            function ShowGraphGif()
-            {
-                var R = document.getElementById("gif");
-                R.style.display = "block";
-                var B = document.getElementById("gifButton");
-                B.value = "Hide Graph";
-            }
-            //gets single exam report of singular patient
-            function get_exam(){
-                var p_id = 0;//document.getElementById("pat_id").value;
-                var e_id = 1;//document.getElementById("pat_id").value;
-
-                var request = new XMLHttpRequest();
-                var url = "/report/"+p_id+"/"+e_id;
-
-                let bool = false;
-                request.open("GET", url, true);
-                request.send();
-                request.onload = () => {
-                    var exam = request.responseText;
-                    console.log(exam)
-                    console.log(exam.type)
-                    bool = true; 
-                    document.getElementById("max-velocity").innerHTML = exam[4];
-                    document.getElementById("max-angle").innerHTML = exam[3];
-                    document.getElementById("strength-class").innerHTML = exam[5];
-                    return exams;
-                }
-                if(bool == false){
-                    document.getElementById("exam").innerHTML = "Cannot Find Name."
-                }
-            }
-        </script>
+        <script src="../static/static.js" language="javascript" type="text/javascript"></script> 
     </head>
 
     <body>
         <div class="nav">
             <form method="GET"> 
-               <!-- <input type="search" class="searchbar" name="search" placeholder="Search title, author, or keyword..." size="40">
-               <button type="submit">Search</button> -->
                <a href={{url_for('start')}}>Home</a>
-               <a href={{url_for('Logout')}}>Logout</a>
+               <!-- <a href={{url_for('Logout')}}>Logout</a> -->
             </form> 
         </div>
 
         <!-- Show the patients name where > "Patient Name?" < is written ? -->
         <h2>Single Exam Report for: "Patient Name?"</h2> 
         <!-- We probably won't need test type, just added from following figma example -->
-        <label>Test Type:</label> 
-        <input type="text" placeholder="Enter Test Type" id="pat_id">
+        <label>Exam Report for Patient:</label> 
+        <input type="text" placeholder="Enter Test Type" id="pat_id" value="{{ exam[2] }}" readonly>
         <br><br>
-        <button id="btn" onClick="get_exam()">On CLick</button>
-        <p>{{ exam }}</p>
+       
         <table>
             <tr>
                 <th>Angle Flexion</th>
@@ -65,21 +29,22 @@
             <tr>
                 <td>
                     Maximum angle of flexion for "patient name?": <br>
-                    <input type="text" id="max-angle" readonly />
+                    <input type="text" id="max-angle" value={{ exam [0][3]}} readonly />
                     <br><br>
                     <i>(i) To view the patients arm path, click on the button below.</i> <br>
                     <!-- graph doesn't need to show by pressing a button, we can make it show automatically -->
                     <button type="button" id="gifButton" onClick="ShowGraphGif()" name="Show Graph of Arm Movement">Show Graph of Arm Movement</button>
                     <br><br>
 
-                    <div id="gif" style="display:none;">
+                    
+                    <div id="gif" >
                         <img src="./static/AngleAnim.gif" alt="Angle Animation">
                     </div>
                     <br><br>
                 </td>
                 <td>
                     Maximum Velocity from Angle Flexion for "Patient Name?": <br>
-                    <input type="text" id="max-velocity" readonly />
+                    <input type="text" id="max-velocity" value={{ exam [0][4]}} readonly />
                     <br><br>
                     <i>(i) This is the maximum angle achieved from flexing elbow from 
                         the starting angle of 180 degrees. </i>
@@ -87,7 +52,7 @@
                 </td>
                 <td>
                     Strength Classification for "Patient Name?": <br>
-                    <input type="text" id="strength-class" readonly />
+                    <input type="text" id="strength-class" value={{ exam [0][5]}} readonly />
                     <br><br>
                     <i>(i) This is the strength classification based on patients results.</i>
                     <br><br>

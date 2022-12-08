@@ -6,32 +6,78 @@
         <link rel="stylesheet" type="text/css" href="../static/style.css"/>
 
         <!-- Quick Redirects that don't interact with API -->
-        <script>
+        <script language="javascript" type="text/javascript">
             function RedirectHome()
             {
                 location.replace("./home.html");
             }
+
             function ShowReportTypes()
             {
+                // Make the Report Types visible
                 var R = document.getElementById("ReportsDiv");
                 R.style.display = "block";
+
+                // Query for the exams based on the patient id
+                var p_id = document.getElementById("pat_id").value;
+                var request = new XMLHttpRequest();
+                var url = "/report/"+p_id+"/exams";
+                var listOfExams = "";
+                let bool = false;
+                request.open("GET", url, true);
+                request.send();
+                request.onload = () => {
+                    listOfExams += "<table> <tr> <th> </th> <th> Exam ID </th>  <th> Exam Date </th></tr>";
+                    var exms = request.responseText;
+                    bool = true;
+                    const array = [];
+                    var t = exms.replaceAll(/[,\\""]/g,"").replaceAll('[','').replaceAll(']','').split(" ");
+                    ti = 0;
+                    for(i = 0;i<(t.length);i+=8){
+                        var x = t.slice(i, i+8);
+                        array[ti] = x;
+                        ti++;
+                    }
+                    for(i = 0; i<=ti; i++)
+                    {
+                        document.getElementById("exam_list").innerHTML = listOfExams;
+                        listOfExams += ("<tr> <td> <button type='checkbox' onClick='gen_report("+ array[i][0]+")'>Select Exam "+ array[i][0]+"</button> <td>" + array[i][0].toString() + "</td> <td>" + array[i][2].toString() + "</td></tr>");
+                    }
+                }                
+                listOfExams += "</table>";
+                console.log(listOfExams);
+                var htmlObject = $(listOfExams);
+                document.getElementById("exam_list").innerHTML = htmlObject;
             }
+
+            function gen_report(exam_id)
+            {
+                var p_id = document.getElementById("pat_id").value;
+                var e_id = exam_id;
+
+                var request = new XMLHttpRequest();
+                var url = "/report/"+p_id+"/" + e_id;
+                
+                let bool = false;
+                request.open("POST", url, true);
+                request.send();
+                // request.onload = () => {
+                //     var exam = request.responseText;
+                //     console.log(exam);
+                //     bool = true;
+                //     return exam;
+                // }
+            }
+
             function ShowExams(examType)
             {
                 var E = document.getElementById("ExamsDiv");
                 if (examType == '1'){
-                    var EBs = document.getElementsByClassName("exam_button");
-                    console.log("length of EBs = ", EBs.length)
-                    for(var i=0; i< EBs.length; i++){
-                        EBs[i].type = "radio";
-                    }
+                    document.getElementById("amount_mess").innerHTML = "Select ONE (1) exam";
                     
                 }
                 else{
-                    var EBs = document.getElementsByClassName("exam_button");
-                    for(var i=0; i< EBs.length; i++){
-                        EBs[i].type = "checkbox";
-                    }
+                    document.getElementById("amount_mess").innerHTML = "Select TWO (2) exams";
                 }
                 E.style.display = "block";
 
@@ -39,24 +85,34 @@
             }
             function ShowReportContent()
             {
-                location.replace("./report_final.html");
+                var p_id = document.getElementById("pat_id").value;
+                var e_id = document.getElementById("exam").value;
+                var request = new XMLHttpRequest();
+                var url = "/report/"+p_id+"/1";//+e_id;
+                
+                let bool = false;
+                request.open("GET", url, true);
+                request.send();
+                request.onload = () => {
+                    var exam = request.responseText;
+                    console.log(exam);
+                    bool = true;
+                    // for(let i = 0; i <= names.length; i++)
+                    // {
+                    //     document.getElementById("exams_list").innerHTML = listOfExams;
+                    //     listOfExams += ("<tr> <td>" + names[i].toString() + "</td> <td>" + grades[names[i]].toString() + "</td></tr>");
+                    // }
+                    // document.getElementById("exam").innerHTML = exam;
+                    return exam;
+                }
             }
-            function ShowExamButton()
-            {
-                var R = document.getElementById("ExamButton");
-                R.style.display = "block";
-                var T = document.getElementById("pat_id").value;
-                console.log(T);
-                document.getElementById("p_id").innerHTML = "Begin Exam for Patient ID: " + T;
-            }
+            
         </script>
     </head>
     <body>
         <!-- Nav Bar for quick navigation -->
         <div class="nav">
             <form method="GET"> 
-               <!-- <input type="search" class="searchbar" name="search" placeholder="Search title, author, or keyword..." size="40">
-               <button type="submit">Search</button> -->
                <a href={{url_for('start')}}>Home</a>
                <a id="logo" href={{url_for('start')}}>V-ARM</a>
                <!-- <a href={{url_for('Logout')}}>Logout</a> -->
@@ -75,7 +131,6 @@
             <button type="button" class='btn' onClick="ShowReportTypes()">SUBMIT</button>
             <button type="button" class='btn' onClick="RedirectHome()">BACK</button>
             
-            
             <div id="ReportsDiv" style="display:none">
                 <h2>Select a Report Type</h2>
                 <!-- Two Options (REPORT or EXAM) -->
@@ -89,7 +144,7 @@
                     <td>
                         Single Report displays the results of ONE (1) examination.
                         <br><br>
-                        <button type="button" onClick="return ShowExams('1')">Single Report</button>
+                        <button type="button" onClick="ShowExams(1)">Single Report</button>
                         <br><br>
                     </td>
                     <td>
@@ -113,60 +168,16 @@
             </table>
             </div>
 
+        <!-- Show all of the exams linked to the patient ID -->
             <div id="ExamsDiv" style="display:none">
-                <h2>Select an Exam</h2>
-                
-
-                <div class="btn-group" style="height:100px;overflow:auto;">
-                    <input class="exam_button">Exam 1</input><br>
-                    <input class="exam_button">Exam 2</input><br>
-                    <input class="exam_button">Exam 3</input><br>
-                    <input class="exam_button">Exam 4</input><br>
-                    <input class="exam_button">Exam 5</input><br>
-                    <input class="exam_button">Exam 6</input><br>
-    
-                     <!-- <ul>
-                        {% for exam in Exams %}
-                        <li> {{ exam }}</li>
-                        {% endfor %}
-                    </ul> -->
-                    
-                </div> 
-
+                <h2 id="amount_mess"></h2>
+                <p id="exam_list"></p>
                 <form action={{url_for('report2')}}>
                     <!-- <button type="button">Generate Report</button> -->
                     <input class="btn" type="submit" value="NEXT">
                 </form>
-                <!-- <button type="button" onClick="ShowReportContent()">NEXT</button> -->
-                <!-- {% for exams in exams %}
-                <div class="exam">
-
-                </div>
-                {% endfor %} -->
             </div>
 
-            <!-- Show all of the exams linked to the patient ID -->
-
-
-
-            <!-- {% for post in posts %}
-            <div class="post">
-                <div class="post-head">
-                <h4><a href={{ url_for('post', id=post.id) }}>{{ post.title }}</a></h4>
-                </div>
-                <div class="post-body">
-                {% if post.body|length < 141 %}
-                <p>{{ post.body }}</p>
-                {% else %}
-                <p>{{ post.body[:140] }}...</p>
-                {% endif %}
-                </div>
-                <div class="post-foot">
-                Posted {{ post.created.strftime("%b %d, %Y") }} at {{ post.created.strftime("%I:%M %p") }} by <a href={{ url_for('profile', username=post.author) }}>{{ post.author }}</a>
-                </div>
-            </div>
-            {% endfor %} -->
-            
             
         </div>
 

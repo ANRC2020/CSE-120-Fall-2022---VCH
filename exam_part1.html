@@ -7,24 +7,36 @@
 
         <!-- Quick Redirects that don't interact with API -->
         <script>
-            function RedirectHome()
-            {
-                location.replace("./home.html");
-            }
             function ShowExamButton()
             {
                 var R = document.getElementById("ExamButton");
                 R.style.display = "block";
                 var T = document.getElementById("pat_id").value;
-                console.log(T);
+                //console.log(T);
                 document.getElementById("p_id").innerHTML = "Begin Exam for Patient ID: " + T;
-                document.getElementById("patient_id").innerHTML = T;
             }
-            // function getPatID(){
-            //     var T = document.getElementById("pat_id").value;
-            //     return T;
-            // }
-            
+            /**
+            //gets all exams of singular patient
+            function get_exam(){
+                var p_id = document.getElementById("pat_id").value;
+                var request = new XMLHttpRequest();
+                var url = "/exam_start/"+p_id;
+                
+                let bool = false;
+                request.open("POST", url, true);
+                request.send();
+                request.onload = () => {
+
+                    var exam = request.responseText;
+                    console.log("the exam is = ", exam)
+                    bool = true;
+                    document.getElementById("exam").innerHTML = exam.toString();
+                }
+                if(bool == false){
+                    document.getElementById("exam").innerHTML = "Cannot Find Name."
+                }
+            }
+            */
         </script>
 
     </head>
@@ -37,6 +49,7 @@
             </form> 
         </div>
         <div class="main">
+            
             <h1>V-ARM</h1>
 
             <!-- store Patient ID -->
@@ -51,16 +64,9 @@
                 <h2 id="p_id"></h2>
                 <!-- TODO: NEED TO GET THE PATIENT ID FROM THE INPUT BOX -->
                 <!-- SAVE THE ID AS p_id BELOW TO PASS THORUGH TO PYTHON -->
-                <form action={{url_for('exam_start', p_id=234)}} method="POST">
-                    <h2 id="p_id"></h2>
-                    <input id="patient_id" type="text" style="display:none;">
-                    <input class="btn" type="submit" value="Begin Exam">
-                </form>
-                
+                <button type="button" class="btn" onClick="get_exam()">Begin Exam</button>
             </div>
-            
-            
-        
+
         </div>
 
 

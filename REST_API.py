@@ -53,47 +53,71 @@ session = Session()
 global salt
 salt = "kadsjbirebiuoyebiqelf"
 
+# convert a sql alchemy row to dictionary
+def convert_dict(result):
+    metric_list = []
+    for row in result:
+        metric_list.append(row)
+    return metric_list
 
 #### API BEGINS -------------------
 
+## This method is the landing page that the site will open up to
+# Has two options for the client to choose
 @app.route('/')
 def start():
    #render the main landing  template
    return render_template("home.html")
 
 
-## Thsi method will return all fo the exams of a single patient
+## This method will return all fo the exams of a single patient
 ## Pass through the patient id for all fo the exams query
-@app.route('/report/<p_id>/exams', methods=['GET', 'POST'])
+@app.route('/report/<p_id>/exams', methods=['GET'])
 def exams_list(p_id):
     if request.method == 'GET':
-        #p_id = request.form.get('pat_id')
-        exams = session.query(Exams.patient_ID==p_id)
-        print("Query 1: ", exams)
-        #Exams.query.filter(Exams.patient_ID==id).first()
-        return render_template('report_part1.html', exams=exams)
+        query = exams.select().where(exams.c.patient_ID==p_id)
+        result = conn.execute(query)
+        Exams = []
+        for exam in result:
+            Exams.append(convert_dict(exam))
+        print(Exams)
+        return json.dumps(Exams)
+        #result = json.dumps([exam for exam in result])
+        #jsonify({'result': [dict(exam) for exam in result]})
+        return render_template('report_part1.html', exams=result)
+
 
 ## This method will return a single exam contents
 ## Pass thorugh the patient id and the exam id for the query
-@app.route('/report/<p_id>/<exid>', methods=['GET'])
-def exam(p_id, exid):
-    #p_id = request.form.get('patient_id')
-    #exid = request.form.get('exam_id')
-    exam = session.query(Exams.exam_ID==exid)
-    #exams = Exams.query.filter(Exams.patient_ID==p_id and Exams.exam_ID==exid).first()
-    return exam
-    #return render_template('report_part1.html', exams=exams)
+@app.route('/report/<p_id>/<exid>', methods=['GET', 'POST'])
+def get_exam_report(p_id, exid):
+    if request.method == 'POST':
+        query = exams.select().where(exams.c.exam_ID==exid and exams.c.patient_ID==p_id)
+        result = conn.execute(query)
+        Exam = convert_dict(result)
+        print(Exam)
+        # return Exam
+        return render_template('report_final.html', exam=Exam)
 
-## ----- Start the Unity VR UI -----
+'''
+    ---------- Start the Unity VR UI ----------
+'''
 @app.route('/exam_start/<p_id>', methods=['POST'])
 def exam_start(p_id):
     #p_id = request.form.get('patient_id')
-    print("patient id = ", p_id)
+    # print("patient id = ", p_id)
+    # query = exams.select(firstname, lastname).where(exams.c.patient_ID==p_id)
+    # result = conn.execute(query)
+
+    # result = [exam for exam in result]
+    # print(result)
+    # exam = session.query(Exams.patient_ID==p_id)
+    # return result
 
     ## ENTER SHREYA's CODE
     # This launches a Unity exe application from command prompt with no additional string arguments
     # Verified on Chloe's windows - works on Command prompt and powershell, not ubuntu
-    subprocess.Popen(r"C:\Users\chloe\Downloads\UOP1_ChopChop_08alpha_Win\OpenProjects_ChopChop_0_8\Chop Chop.exe", shell=True)
+    subprocess.Popen(r"C:\Users\chloe\Desktop\VCH_Project\VR_Exam\UnityGame\CSE-120-Fall-120-VCH.exe", shell=True)
     
     # Return to the home page for report access
     return render_template('report_final.html')
@@ -101,32 +125,19 @@ def exam_start(p_id):
 ### ----- Navigation for pages -----
 @app.route('/report', methods=['GET'])
 def report1():
-    exams = exams_list()
-    print(exams)
-    return render_template('report_part1.html', exams=exams)
+    # exams = exams_list()
+    # print(exams)
+    return render_template('report_part1.html')#, exams=exams)
 
 @app.route('/report2', methods=['GET'])
 def report2():
-    exams = exam()
-    print(exams)
-    return render_template('report_final.html', exam=exam)
+    # exams = exam()
+    # print(exams)
+    return render_template('report_final.html')#, exam=exam)
 
 @app.route('/exam', methods=['GET'])
 def exam1():
     return render_template('exam_part1.html')
-
-## ------ Handled by Abbas on Data Analysis Script ------
-# @app.route('/vr/create', methods=['POST'])
-# def post_patient(id):
-#     if request.method == 'POST':
-#         patient = salt
-#         query = db.insert(Exams).values(id = str(i), pat_id=str(ids[i][0]), exam_date=str(datetime.datetime.now()), curl_test_angle_result=random.randint(1,180), curl_test_velocity_result=random.randint(1,180), curl_test_strength_result=random.randint(1,5), draw_shape_time_result=random.randint(1,180))
-#         conn.execute(query)
-
-
-
-
-
 
 
 

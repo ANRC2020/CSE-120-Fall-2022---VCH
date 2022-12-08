@@ -10,6 +10,31 @@
                 var B = document.getElementById("gifButton");
                 B.value = "Hide Graph";
             }
+            //gets single exam report of singular patient
+            function get_exam(){
+                var p_id = 0;//document.getElementById("pat_id").value;
+                var e_id = 1;//document.getElementById("pat_id").value;
+
+                var request = new XMLHttpRequest();
+                var url = "/report/"+p_id+"/"+e_id;
+
+                let bool = false;
+                request.open("GET", url, true);
+                request.send();
+                request.onload = () => {
+                    var exam = request.responseText;
+                    console.log(exam)
+                    console.log(exam.type)
+                    bool = true; 
+                    document.getElementById("max-velocity").innerHTML = exam[4];
+                    document.getElementById("max-angle").innerHTML = exam[3];
+                    document.getElementById("strength-class").innerHTML = exam[5];
+                    return exams;
+                }
+                if(bool == false){
+                    document.getElementById("exam").innerHTML = "Cannot Find Name."
+                }
+            }
         </script>
     </head>
 
@@ -29,6 +54,8 @@
         <label>Test Type:</label> 
         <input type="text" placeholder="Enter Test Type" id="pat_id">
         <br><br>
+        <button id="btn" onClick="get_exam()">On CLick</button>
+        <p>{{ exam }}</p>
         <table>
             <tr>
                 <th>Angle Flexion</th>

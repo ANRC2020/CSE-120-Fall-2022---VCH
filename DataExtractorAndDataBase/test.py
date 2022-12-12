@@ -1,39 +1,21 @@
-import numpy as np
+
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import numpy as np
+ 
+fig, ax = plt.subplots()
+x = range(30) 
+y = [0] * 30
+ 
+bars = ax.bar(x, y, color="blue")
+ax.axis([0, 30, 0, 10])
+ 
+def update(i):
+    y[i] = np.random.randint(0, 10)
+    bars[i].set_height(y[i])
 
-#-- Generate Data -----------------------------------------
-# Using linspace so that the endpoint of 360 is included...
-azimuths = np.radians(np.linspace(90, 30, 20))
-zeniths = np.arange(0, 70, 10)
+title = ax.text(0.5,0.85, "", bbox={'facecolor':'w', 'alpha':0.5, 'pad':5},transform=ax.transAxes, ha="center")
 
-r, theta = np.meshgrid(zeniths, azimuths)
-values = np.random.random((azimuths.size, zeniths.size))
-
-#-- Plot... ------------------------------------------------
-fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
-ax.contourf(theta, r, values)
-
+anim = FuncAnimation(fig, update, frames = 30, interval=100)
+anim.save('myanimation.gif') 
 plt.show()
-
-# import matplotlib.pyplot as plt
-# from math import sin, cos, pi
-# import math
-
-# theta = 89
-# l1 = 5
-# l2 = 5
-
-# x = [0, 0]
-# y = [0, l1]
-
-# plt.plot(x, y)
-
-# plt.xlim([-10, 10])
-# plt.ylim([-10, 10])
-
-# x1 = [0,l2*cos(theta)]
-# y1 = [0,l2*sin(theta)]
-
-# plt.plot(x1, y1)
-
-# plt.show()

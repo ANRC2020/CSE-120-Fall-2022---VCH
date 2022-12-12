@@ -1,15 +1,30 @@
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import pandas as pd
 import numpy as np
 import math
 from math import sqrt, acos, asin, sin, atan, cos, pi
 import json
 import time
+import random
+from console_progressbar import ProgressBar
 
 # Set the lengths of upper and lower arms
 global l1
 global l2
 global prev_angle
+global prev_time
+global angles
+global version
+global title
+global velocity
+
+# Clear Terminal
+try:
+    import os
+    os.system('cls')
+except:
+    pass
 
 def euclidean_distance(point_1, point_2):
     
@@ -21,15 +36,17 @@ def law_cosine(a, b, c):
     # print((c**2 - a**2 - b**2)/(-2*a*b))
     return math.degrees(acos((c**2 - a**2 - b**2)/(-2*a*b)))
 
-def angular_velocity(prev_angle, curr_angle, delta_t):
+def angular_velocity(prev_angle, curr_angle, prev_time, curr_time, l2):
     radians = ((curr_angle - prev_angle)/180)*pi
-    return abs(radians/delta_t)
+    return abs(radians/(curr_time - prev_time)*l2)
 
-def visualize_movement(shoulder, hand, num_entry, x_bound, y_bound, z_bound):
+def visualize_movement(shoulder, hand, num_entry, curr_time,  x_bound, y_bound, z_bound):
 
     global l1
     global l2
     global prev_angle
+    global prev_time
+    global velocity
 
     # Set the shoulder and end of arm points 
     X_data = np.array([float(shoulder[0]), float(hand[0])]) 
@@ -59,10 +76,15 @@ def visualize_movement(shoulder, hand, num_entry, x_bound, y_bound, z_bound):
 
     
     if num_entry != 0:
-        print(f"Angular velocity: {angular_velocity(prev_angle, theta_3, 0.1)}")
+        # print(f"Angular velocity: {angular_velocity(prev_angle, theta_3, prev_time, curr_time, l2)}")
+
+        velocity.append(angular_velocity(prev_angle, theta_3, prev_time, curr_time, l2))
+
         prev_angle = theta_3
+        prev_time = curr_time
     else:
         prev_angle = theta_3
+        prev_time = curr_time
 
     #####################################################################################
     
@@ -70,15 +92,16 @@ def visualize_movement(shoulder, hand, num_entry, x_bound, y_bound, z_bound):
 
     # Plot the Shoulder and End of Arm Points
 
-    azimuths = np.radians(np.linspace(90, theta_3 + 90, 20))
-    zeniths = np.arange(0, 70, 10)
+    # azimuths = np.radians(np.linspace(0, theta_3, 20))
+    # zeniths = np.arange(0, 70, 10)
 
-    r, theta = np.meshgrid(zeniths, azimuths)
-    values = np.random.random((azimuths.size, zeniths.size))
+    # r, theta = np.meshgrid(zeniths, azimuths)
+    # values = np.random.random((azimuths.size, zeniths.size))
 
-    #-- Plot... ------------------------------------------------
-    # fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
-    ax.contourf(theta, r, values)
+    # #-- Plot... ------------------------------------------------
+    # # fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+    # ax.contourf(theta, r, values)
+    # ax.set_theta_zero_location("N")
 
     # plt.show()
 
@@ -125,6 +148,66 @@ def visualize_movement(shoulder, hand, num_entry, x_bound, y_bound, z_bound):
 
     # plt.show()
 
+    return theta_3
+
+def get_time():
+
+    global version
+
+    pb = ProgressBar(total=len(angles), suffix='Completed', decimals=3, length=50, fill='X', zfill='-')
+    
+    while True: 
+        try:   
+            version += 1
+
+            pb.print_progress_bar(version)
+
+            yield times[version]
+
+        except:
+            break
+
+def update(_time):
+
+    global angles
+    global version
+    global title
+
+    i = version
+
+    
+    if len(angles) <= i:
+        return title,
+
+    theta_3 = angles[i]
+
+    ax.cla()
+
+    # 2D PLOT
+
+    # Plot the Shoulder and End of Arm Points
+
+    azimuths = np.radians(np.linspace(0, theta_3, 20))
+    zeniths = np.arange(0, 2, 1)
+
+    r, theta = np.meshgrid(zeniths, azimuths)
+    values = np.random.random((azimuths.size, zeniths.size))
+
+    #-- Plot... ------------------------------------------------
+    # fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+    ax.contourf(theta, r, values)
+    ax.set_theta_zero_location("N")
+
+    title = ax.text(0.8,1, "", bbox={'facecolor':'w', 'alpha':0.5, 'pad':5},transform=ax.transAxes, ha="left")
+    title.set_text(u"Angle: {}°\nTime: {}\nStep: {}/{}".format(round(theta_3, 3), round(_time, 3), i, len(angles)))
+
+    # time.sleep(0.5)
+    #plt.pause(0.5)
+
+    plt.draw()
+    return title,
+    
+
 ##########################################################################################################################
 
 # Get Hand's Positional Data
@@ -165,110 +248,192 @@ with open(arm_points_path, 'r') as f:
 
     points.append(arr)
 
-# Calculate the distance of the upper and lower arms
+fit = 0
+works = False
 
-l1 = euclidean_distance(points[0], points[1]) + 0.3
-l2 = euclidean_distance(points[1], points[2]) + 0.3
+while works == False:
 
-# print(l1, l2)
+    # Calculate the distance of the upper and lower arms
 
-# l1 = 0.7
-# l2 = 0.7
+    l1 = euclidean_distance(points[0], points[1]) + fit
+    l2 = euclidean_distance(points[1], points[2]) + fit
 
-# print(l1, l2)
+    # Object's Positional Data
+    object_position_path = r"C:/Users/siddi/AppData/LocalLow/DefaultCompany/CSE-120-Fall-120-VCH/ObjectPositionData.json"
 
-# Object's Positional Data
-object_position_path = r"C:/Users/siddi/AppData/LocalLow/DefaultCompany/CSE-120-Fall-120-VCH/ObjectPositionData.json"
+    df = pd.DataFrame(columns=['x','y','z', 'time'])
 
-df = pd.DataFrame(columns=['x','y','z'])
+    # fig = plt.figure()
+    # ax = plt.axes(projection='3d')
 
-# fig = plt.figure()
-# ax = plt.axes(projection='3d')
+    # fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+
+    # Set the shoulder's position
+    shoulder = points[0]
+
+    # Get the position of the hand and corresponding times
+    hand_positions = []
+    times = []
+
+    with open(object_position_path, 'r') as f:
+
+        arr = []
+
+        for i, row in enumerate(f):
+            my_dict = json.dumps(row)
+
+            # print(my_dict)
+
+            if("x" in my_dict or "y" in my_dict or "z" in my_dict):
+                
+                position = ""
+
+                for char in my_dict:
+                    try:
+                        if char == ".":
+                            position += char
+                            continue
+
+                        temp = str(int(char))
+                        position += temp
+                    except:
+                        pass
+                
+                if len(arr) < 3:
+                    arr.append(float(position))
+                else:
+                    hand_positions.append(arr)
+                    arr = []
+                    arr.append(float(position))
+
+            elif "Time" in my_dict:
+
+                position = ""
+
+                for char in my_dict:
+                    try:
+                        if char == ".":
+                            position += char
+                            continue
+
+                        temp = str(int(char))
+                        position += temp
+                    except:
+                        pass
+
+                times.append(float(position))
+
+        hand_positions.append(arr)
+
+    # print(hand_positions)
+
+    # Get the min-max of each dimension (x, y, z)
+
+    x_min = 2147483647
+    x_max = -2147483647
+    y_min = 2147483647
+    y_max = -2147483647
+    z_min = 2147483647
+    z_max = -2147483647
+
+    for row in hand_positions:
+
+        if row[0] < x_min:
+            x_min = row[0]
+
+        if row[0] > x_max:
+            x_max = row[0]
+
+        if row[1] < y_min:
+            y_min = row[1]
+
+        if row[1] > y_max:
+            y_max = row[1]
+
+        if row[2] < z_min:
+            z_min = row[2]
+
+        if row[2] > z_max:
+            z_max = row[2]
+
+
+    x_bound = [x_min - 0.1, x_max + 0.1]
+    y_bound = [y_min - 0.1, y_max + 0.1]
+    z_bound = [z_min - 0.1, z_max + 0.1]
+
+    # print(x_bound, y_bound, z_bound)
+    # time.sleep(2)
+
+    angles = []
+    velocity = []
+
+    try:
+        for i, row in enumerate(hand_positions):
+            # Set the postion of the hand
+            hand = row
+            
+            angles.append(visualize_movement(shoulder, hand, i, times[i], z_bound, y_bound, x_bound))
+            
+            # plt.draw()
+            # plt.pause(0.1)
+            # ax.cla()
+
+        works = True
+
+    except:
+
+        fit += 0.00001
+        works = False
+
+print(f"fit = {fit}")
 
 fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
 
-# Set the shoulder's position
-shoulder = points[0]
+version = 0
 
-# Get the position of the hand
-hand_positions = []
+anim = FuncAnimation(fig, update, get_time, interval=100, blit=True, repeat=False, save_count=len(times))
 
-with open(object_position_path, 'r') as f:
+# anim = FuncAnimation(fig, update, frames = len(angles), interval=100)
+anim.save('AngleAnim.gif') 
 
-    arr = []
+# Extract the maximum (closest to self) angle and the time spent within +/- x degrees of it
 
-    for i, row in enumerate(f):
-        my_dict = json.dumps(row)
+max_angle = min(angles)
+index = angles.index(max_angle)
 
-        if("x" in my_dict or "y" in my_dict or "z" in my_dict):
-            
-            position = ""
+# Specify +/- x degrees
+tolerance = 5
 
-            for char in my_dict:
-                try:
-                    if char == ".":
-                        position += char
-                        continue
+# Find the longest time interval the patient was able to hold their hand nearest to themselves
+max_interval = 0
+max_start = 0
+max_end = 0
 
-                    temp = str(int(char))
-                    position += temp
-                except:
-                    pass
-            
-            if len(arr) < 3:
-                arr.append(float(position))
-            else:
-                hand_positions.append(arr)
-                arr = []
-                arr.append(float(position))
+curr_max = 0
+curr_start = 0
+curr_end = 0
 
-    hand_positions.append(arr)
+for i, entry in enumerate([angle - max_angle for angle in angles]):
 
-# print(hand_positions)
+    if entry <= tolerance:
+        curr_max += 1
 
-# Get the min-max of each dimension (x, y, z)
-
-x_min = 2147483647
-x_max = -2147483647
-y_min = 2147483647
-y_max = -2147483647
-z_min = 2147483647
-z_max = -2147483647
-
-for row in hand_positions:
-
-    if row[0] < x_min:
-        x_min = row[0]
-
-    if row[0] > x_max:
-        x_max = row[0]
-
-    if row[1] < y_min:
-        y_min = row[1]
-
-    if row[1] > y_max:
-        y_max = row[1]
-
-    if row[2] < z_min:
-        z_min = row[2]
-
-    if row[2] > z_max:
-        z_max = row[2]
-
-
-x_bound = [x_min - 0.1, x_max + 0.1]
-y_bound = [y_min - 0.1, y_max + 0.1]
-z_bound = [z_min - 0.1, z_max + 0.1]
-
-# print(x_bound, y_bound, z_bound)
-# time.sleep(2)
-
-for i, row in enumerate(hand_positions):
-    # Set the postion of the hand
-    hand = row
+        if curr_max == 1:
+            curr_start = i
+            curr_end = i
+        
+        else:
+            curr_end = i
     
-    visualize_movement(shoulder, hand, i, z_bound, y_bound, x_bound)
-    
-    plt.draw()
-    plt.pause(0.1)
-    ax.cla()
+    else:
+
+        if curr_max > max_interval:
+            max_interval = curr_max
+            max_start = curr_start
+            max_end = curr_end
+
+        curr_max = 0
+        curr_start = 0
+        curr_end = 0
+
+print(f"Spent {round(times[max_end] - times[max_start], 5)} seconds within {tolerance} degrees of the max angle of {round(max_angle, 5)}")

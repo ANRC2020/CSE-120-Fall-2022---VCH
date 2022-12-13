@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEngine.InputSystem;
 using System;
 using System.IO;
+using System.Diagnostics;
+
+
 
 public class RecPositions : MonoBehaviour {
     public string fileName = "/ObjectPositionData.json";
@@ -11,38 +13,37 @@ public class RecPositions : MonoBehaviour {
     string saveFile;
     private List<Vector3> positions;
     public float interval = 0.1f;
-    public float tSample = 10.0f;
+    public float tSample = 0.0f;
+    public float time = 0.0f;
 
     void Start ()
     {
         positions = new List<Vector3>();
-
         InvokeRepeating("RecPoint", tSample, interval);
     }
 
     void RecPoint() 
     {
-        armData.positions.Add(new armPositions(transform.position));
+        time += interval;
+        if (transform.parent != null){
+            armData.ArmData.Add(new armPositions(transform.position, time));
+        }
     }
 
     void SaveToJson(string fileName)
     {
         saveFile = Application.persistentDataPath + fileName;
-        //armData.positions.Add(new armPositions(transform.position));
         string line = JsonUtility.ToJson(armData, true);
-        File.WriteAllText(saveFile, line);
-        Debug.Log(saveFile);
-       
+        File.WriteAllText(saveFile, line);    
     }
-
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            CancelInvoke("RecPoint");
+        
+        if (transform.parent != null){
             SaveToJson(fileName);
         }
+        
     }
 
 }
@@ -50,20 +51,19 @@ public class RecPositions : MonoBehaviour {
 [System.Serializable]
 public class armPositions
 {
-    public armPositions(Vector3 pos)
+    public armPositions(Vector3 pos, float time)
     {
-        x = pos.x;
-        y = pos.y;
-        z = pos.z;
+        Position = pos;
+        Time = time;
     }
-    public float x;
-    public float y;
-    public float z;
+    
+    public Vector3 Position;
+    public float Time;
 }
 
 [System.Serializable]
 public class Positions
 {
-    public List<armPositions> positions = new List<armPositions>();
+    public List<armPositions> ArmData = new List<armPositions>();
 
 }

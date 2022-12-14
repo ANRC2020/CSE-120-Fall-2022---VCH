@@ -1,8 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
-        <script src="../static/static.js" language="javascript" type="text/javascript"></script> 
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+        <!-- <link rel="javascript" type="text/js" href="{{ url_for('static', filename='static.js')}}"/>
+        <script src="./static/static.js" language="javascript" type="text/javascript"></script>  -->
+        <script> 
+            function ShowGraphGif()
+            {
+                var R = document.getElementById("gif");
+                R.style.display = "block";
+                var B = document.getElementById("gifButtonH");
+                B.style = "block";
+                var B = document.getElementById("gifButtonS");
+                B.style.display = "none";           
+            }
+            function HideGraphGif()
+            {
+                var R = document.getElementById("gif");
+                R.style.display = "none";
+                var B = document.getElementById("gifButtonH");
+                B.style.display = "none";
+                var B = document.getElementById("gifButtonS");
+                B.style = "block";           
+            }
+        </script>
     </head>
 
     <body>
@@ -14,11 +35,10 @@
         </div>
 
         <!-- Show the patients name where > "Patient Name?" < is written ? -->
-        <h2>Single Exam Report for: "Patient Name?"</h2> 
+        <h2>Single Exam Report for: {{ pat[0][1] }} {{ pat[0][2] }}</h2> 
         <!-- We probably won't need test type, just added from following figma example -->
-        <label>Exam Report for Patient:</label> 
-        <input type="text" placeholder="Enter Test Type" id="pat_id" value="{{ exam[2] }}" readonly>
-        <br><br>
+        <!-- <label>Exam Report for Patient:</label> 
+        <input type="text" id="pat_id" value="{{ pat[0][1] }} {{ pat[0][2] }}" readonly> -->
        
         <table>
             <tr>
@@ -28,31 +48,33 @@
             </tr>
             <tr>
                 <td>
-                    Maximum angle of flexion for "patient name?": <br>
-                    <input type="text" id="max-angle" value={{ exam [0][3]}} readonly />
+                    <b>Minimum Angle of Flexion:</b> <br>
+                    <input type="text" id="max-angle" value={{ exam[0][3] }} style="text-align: center;" readonly />
                     <br><br>
-                    <i>(i) To view the patients arm path, click on the button below.</i> <br>
+                    <i>(i) To view the patients arm path, click on the button below.</i> <br><br>
                     <!-- graph doesn't need to show by pressing a button, we can make it show automatically -->
-                    <button type="button" id="gifButton" onClick="ShowGraphGif()" name="Show Graph of Arm Movement">Show Graph of Arm Movement</button>
+                    <button type="button" id="gifButtonS" onClick="ShowGraphGif()">Show Graph of Arm Movement</button>
+                    <button type="button" id="gifButtonH" onClick="HideGraphGif()" style="display:none;">Hide Graph of Arm Movement</button>
+
                     <br><br>
 
                     
-                    <div id="gif" >
-                        <img src="./static/AngleAnim.gif" alt="Angle Animation">
+                    <div id="gif" style="display:none;">
+                        <img src="/static/AngleAnim.gif" alt="Angle Animation" style="width:350px; height:300px;">
                     </div>
                     <br><br>
                 </td>
                 <td>
-                    Maximum Velocity from Angle Flexion for "Patient Name?": <br>
-                    <input type="text" id="max-velocity" value={{ exam [0][4]}} readonly />
+                    <b>Maximum Velocity </b> from Angle Flexion: <br>
+                    <input type="text" id="max-velocity" value={{ exam[0][4] }} style="text-align: center;" readonly />
                     <br><br>
                     <i>(i) This is the maximum angle achieved from flexing elbow from 
                         the starting angle of 180 degrees. </i>
                     <br><br>
                 </td>
                 <td>
-                    Strength Classification for "Patient Name?": <br>
-                    <input type="text" id="strength-class" value={{ exam [0][5]}} readonly />
+                    <b>Strength Classification:</b> <br>
+                    <input type="text" id="strength-class" value={{ exam[0][5] }} style="text-align: center;" readonly />
                     <br><br>
                     <i>(i) This is the strength classification based on patients results.</i>
                     <br><br>

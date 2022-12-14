@@ -46,7 +46,7 @@
         <div class="nav">
             <form method="GET"> 
                <a href={{url_for('start')}}>Home</a>
-               <a href={{url_for('Logout')}}>Logout</a>
+               <!-- <a href={{url_for('Logout')}}>Logout</a> -->
             </form> 
         </div>
         <div class="main">
@@ -65,7 +65,7 @@
                 <h2 id="p_id"></h2>
                 <!-- TODO: NEED TO GET THE PATIENT ID FROM THE INPUT BOX -->
                 <!-- SAVE THE ID AS p_id BELOW TO PASS THORUGH TO PYTHON -->
-                <button type="button" class="btn" onClick="get_exam()">Begin Exam</button>
+                <button type="button" class="btn" onClick="start_exam()">Begin Exam</button>
             </div>
 
         </div>

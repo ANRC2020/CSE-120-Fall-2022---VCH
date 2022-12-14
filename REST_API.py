@@ -95,7 +95,12 @@ def get_exam_report(p_id, exid):
         query = exams.select().where(exams.c.exam_ID==exid and exams.c.patient_ID==p_id)
         result = conn.execute(query)
         Exam = convert_dict(result)
-        return render_template('report_final.html', exam=Exam)
+        query = patients.select().where(patients.c.patient_ID==p_id)
+        result1 = conn.execute(query)
+        print(result1)
+        Patient = convert_dict(result1)
+        print(Patient)
+        return render_template('report_final.html', exam=Exam, pat=Patient)
 
 '''
     ---------- Start the Unity VR UI ----------
@@ -115,8 +120,9 @@ def exam_start(p_id):
     ## ENTER SHREYA's CODE
     # This launches a Unity exe application from command prompt with no additional string arguments
     # Verified on Chloe's windows - works on Command prompt and powershell, not ubuntu
-    subprocess.Popen(r"C:\Users\chloe\Desktop\VCH_Project\VR_Exam\UnityGame\CSE-120-Fall-120-VCH.exe", shell=True)
-    subprocess.run(['python3', 'sub.py', p_id])
+    subprocess.Popen(r"C:\Users\chloe\Desktop\VCH_Project\VR_Exam\OpenProjects_ChopChop_0_8\Chop Chop.exe", shell=True)
+    #subprocess.Popen(r"C:\Users\chloe\Desktop\VCH_Project\VR_Exam\UnityGame\CSE-120-Fall-120-VCH.exe", shell=True)
+    #subprocess.run(['python3', 'sub.py', p_id])
     #'sub.py'  = replace with dataextraction path
     #p_id = replace with patient id
 

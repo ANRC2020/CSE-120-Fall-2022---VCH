@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>REP #1 - Valley Children's Hospital</title>
+        <!-- Styling -->
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+
+        <!-- Quick Redirects that don't interact with API -->
+        <script src="./static/static.js" language="javascript" type="text/javascript"></script> 
+        
+    </head>
+    <body>
+        <!-- Nav Bar for quick navigation -->
+        <div class="nav">
+            <form method="GET"> 
+               <a href={{url_for('start')}}>Home</a>
+<!--                <a id="logo" href={{url_for('start')}}>V-ARM</a> -->
+               <!-- <a href={{url_for('Logout')}}>Logout</a> -->
+            </form> 
+        </div>
+
+        <!-- Main Content for Doctor -->
+        <div class="main">
+            <h1>V-ARM</h1>
+
+            <!-- store Patient ID -->
+            <h2>Enter the Patient ID</h2>
+            <label>Patient ID:</label>
+            <input type="text" placeholder="Patient ID" id="pat_id">
+
+            <button type="button" class='btn' onClick="ShowReportTypes()">SUBMIT</button>
+<!--             <button type="button" class='btn' onClick="RedirectHome()">BACK</button> -->
+            <div id="ReportsDiv" style="display:none">
+                <h2>Select a Report Type</h2>
+                <!-- Two Options (REPORT or EXAM) -->
+            <table>
+                <tr>
+                    <th>Single</th>
+<!--                     <th>Progressive</th>
+                    <th>Comparative</th> -->
+                </tr>
+                <tr>
+                    <td>
+                        Single Report displays the results of ONE (1) examination.
+                        <br><br>
+                        <button type="button" onClick="ShowExams(1)">Single Report</button>
+                        <br><br>
+                    </td>
+<!--                     <td>
+                        Progressive Report compares two examinations by a single patient. 
+                        <br><br>
+                        (<i>Note: You will select TWO (2) exams by the patient for a comparison.</i>)
+                        <br><br>
+                        <button type="button" onClick="ShowExams(2)">Progressive Report</button>
+                        <br><br>
+                    </td>
+                    <td>
+                        Comparative Report compares two examinations of two different patients. 
+                        <br><br>
+                        (<i>Note: You will select TWO (2) exams from different patients for a comparison</i>)
+                        <br><br>
+                        <button type="button" onClick="ShowExams(2)">Comparative Report</button>
+                        <br><br>
+                    </td> -->
+                </tr>
+                
+            </table>
+            </div>
+
+        <!-- Show all of the exams linked to the patient ID -->
+            <div id="ExamsDiv" style="display:none">
+                <h2 id="amount_mess"></h2>
+                <p id="exam_list"></p>
+            </div>
+                    <!-- <input class="btn" type="submit" value="NEXT"> -->
+
+            
+        </div>
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+            <!-- <p><a href="mailto:hege@example.com">hege@example.com</a></p> -->
+        </footer> 
+    </body>
+</html>

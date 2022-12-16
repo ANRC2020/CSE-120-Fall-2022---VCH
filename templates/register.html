@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>REGISTER - Valley Children's Hospital</title>
+        <link rel="shortcut icon" href="file:///C:/Users/chloe/Desktop/html%20pages%20VCH/VCH_Logo.png" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+    </head>
+    <body>
+        <!-- Nav Bar for quick navigation -->
+        <div class="nav">
+            <form class="nav" method="GET"> 
+                <a href={{url_for('start')}}>Home</a>
+                <a href={{url_for('Login')}}>Login</a>
+                <!-- <div class="nav-img">
+                    <img src="VCH_Logo.png" class="img-fluid">
+                </div> -->
+            </form> 
+        </div>
+
+        <h1>Welcome to V-ARM!</h1>
+        <h2>Enter the information below to register as a user</h2>
+        <form class="form_info" action="{{ url_for('Register') }}" method="post">
+            <p class="form_entry">Enter First Name: <input type=text name=fname></p>
+            <p class="form_entry">Enter Last Name: <input type=text name=lname></p>
+            <p class="form_entry">Enter Username: <input type=text name=username></p>
+            <p class="form_entry">Enter Password: <input type=password name=password></p>
+            <p class="form_entry">Re-Enter Password: <input type=password name=verify></p>
+            <p class="form_entry"><input type=submit value=REGISTER></p>
+        </form>
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+            <!-- <p><a href="mailto:hege@example.com">hege@example.com</a></p> -->
+        </footer> 
+    </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EXAM #1 - Valley Children's Hospital</title>
+        <!-- Styling -->
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+        <script src="./static/static.js" language="javascript" type="text/javascript"></script> 
+
+        <!-- Quick Redirects that don't interact with API -->
+        <script>
+            function ShowExamButton()
+            {
+                var R = document.getElementById("ExamButton");
+                R.style.display = "block";
+                var T = document.getElementById("pat_id").value;
+                //console.log(T);
+                document.getElementById("p_id").innerHTML = "Begin Exam for Patient ID: " + T;
+            }
+            /**
+            //gets all exams of singular patient
+            function get_exam(){
+                var p_id = document.getElementById("pat_id").value;
+                var request = new XMLHttpRequest();
+                var url = "/exam_start/"+p_id;
+                
+                let bool = false;
+                request.open("POST", url, true);
+                request.send();
+                request.onload = () => {
+
+                    var exam = request.responseText;
+                    console.log("the exam is = ", exam)
+                    bool = true;
+                    document.getElementById("exam").innerHTML = exam.toString();
+                }
+                if(bool == false){
+                    document.getElementById("exam").innerHTML = "Cannot Find Name."
+                }
+            }
+            */
+        </script>
+
+    </head>
+
+    <body>
+        <div class="nav">
+            <form method="GET"> 
+               <a href={{url_for('start')}}>Home</a>
+               <!-- <a href={{url_for('Logout')}}>Logout</a> -->
+            </form> 
+        </div>
+        <div class="main">
+            
+            <h1>V-ARM</h1>
+
+            <!-- store Patient ID -->
+            <h2>Enter the Patient ID</h2>
+            <label>Patient ID:</label>
+            <input type="text" placeholder="Patient ID" id="pat_id">
+
+            <button type="button" class='btn' onClick="ShowExamButton()">SUBMIT</button>
+<!--             <button type="button" class='btn' onClick="RedirectHome()">BACK</button>  -->
+            <div id="ExamButton" style="display:none">
+                <h2 id="p_id"></h2>
+                <!-- TODO: NEED TO GET THE PATIENT ID FROM THE INPUT BOX -->
+                <!-- SAVE THE ID AS p_id BELOW TO PASS THORUGH TO PYTHON -->
+                <button type="button" class="btn" onClick="start_exam()">Begin Exam</button>
+            </div>
+
+        </div>
+
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+            <!-- <p><a href="mailto:hege@example.com">hege@example.com</a></p> -->
+        </footer> 
+    </body>
+</html>

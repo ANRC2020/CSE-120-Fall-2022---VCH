@@ -1,0 +1,76 @@
+.nav {
+	width: 100%;
+	overflow: hidden;
+	background-color: #0091b9;
+}
+
+
+.nav a:link, a.nav-button:visited, a.nav-button {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	height: 100%;
+	background-color: #0091b9;
+	color: #FFFFFF;
+	border: none;
+	text-align: center;
+	padding: 17px 30px;
+	/* float: right; */
+	display: inline-block;
+}
+
+.nav a:hover, a.nav-button:active {
+	background-color:  #83c3d9;
+	color: white;
+}
+
+#logo{
+    text-align: center;
+}
+
+/* .nav-img{
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: -6px;
+} */
+
+th{
+    border: 2px solid;
+    text-align:center;
+    padding:5px;
+    background-color: darkgrey;
+}
+td{
+    border: 2px solid;
+    text-align:center;
+    padding:5px;
+}
+table{
+    /* border: 2px solid; */
+    margin: 50px;
+    
+}
+
+.form_info{
+    border: 2px solid;
+    margin: 50px;
+    
+    
+}
+.form_entry{
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 3px;
+    background-color: #0091b9;
+    color: white;
+}
+
+h1{
+    text-align: center;
+}

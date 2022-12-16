@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HOME - Valley Children's Hospital</title>
+        <!-- Styling -->
+        <link rel="stylesheet" type="text/css" href="../static/style.css"/>
+        <script src="./static/static.js" language="javascript" type="text/javascript"></script> 
+
+        <!-- Quick Redirects that don't interact with API -->
+        <script>
+            function RedirectPatientSelection()
+            {
+                location.replace("./report_part1.html");
+            }
+            function RedirectExamStart()
+            {
+                location.replace("./exam_part1.html")
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Nav Bar for quick navigation -->
+        <div class="nav">
+            <form method="GET"> 
+               <a href={{url_for('start')}}>Home</a>
+               <!-- <a href={{url_for('Login')}}>Login</a>
+               <a href={{url_for('Register')}}>Register</a> -->
+            </form> 
+        </div>
+
+        <!-- Main Content for Doctor -->
+        <div class="main">
+            <h1>V-ARM</h1>
+            
+            <!-- Two Options (REPORT or EXAM) -->
+            <table>
+                <tr>
+                    <th>Generate Report</th>
+                    <th>Administer Exam</th>
+                </tr>
+                <tr>
+                    <td>
+                        <br>
+                        View the results of an exam. Export the report as a PDF or view within the window.
+                        <br><br>
+                        (<i>Note: An exam must be completed before viewing the exam's report</i>)
+                        <br><br>
+                        <form action={{url_for('report1')}}>
+                            <!-- <button type="button">Generate Report</button> -->
+                            <input class="btn" type="submit" value="Generate Report">
+                        </form>
+                        <!-- <button type="button" onClick="RedirectPatientSelection()">Generate Report</button> -->
+                        <br><br>
+                    </td>
+                    <td>
+                        <br>
+                        Begin the VR examination. The results will be shown before pushing to the database. 
+                        <br><br>
+                        <form action={{url_for('exam1')}}>
+                            <!-- <button type="button">Generate Report</button> -->
+                            <input class="btn" type="submit" value="Administer Exam">
+                        </form>
+                        <!-- <button type="button" onClick="RedirectExamStart()">Administer Exam</button> -->
+                        <br><br>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+
+        <footer>
+            <p>@ Valley Children's Hospital (Team V-ARM) 2022 </p>
+            <!-- <p><a href="mailto:hege@example.com">hege@example.com</a></p> -->
+        </footer> 
+    </body>
+</html>

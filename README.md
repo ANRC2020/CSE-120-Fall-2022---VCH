@@ -8,3 +8,9 @@ Libraries/Dependecies:
 - flask-sqlalchemy 3.0.2
 - pandas 1.5.1
 - datetime
+
+VR Specifications:
+This project was built using VIVE Eye Pro virtual reality system. The VR system specs and minimum computer system requirements can be found at the following website:
+https://www.vive.com/us/product/vive-pro-eye/specs/
+
+Please be sure to follow the suggested setup processes outlined in the VIVE Pro Eye's setup guide. You will be need to install Steam VR to run our VR enviornment. Unity will be necessary if you wish to develop a new VR enviornment.

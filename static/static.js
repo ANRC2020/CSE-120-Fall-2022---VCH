@@ -67,7 +67,7 @@ function ShowReportTypes()
  
         }//{{url_for('get_exam_report', "+ (pid=array[i][1])+","+ (exid=array[i][0])+")}}
     } 
-     
+
     listOfExams += "</table>";
     console.log(listOfExams);
     var htmlObject = $(listOfExams);
@@ -115,6 +115,7 @@ function ShowGraphGif()
     B.value = "Hide Graph";
 }
 //gets single exam report of singular patient
+/**
 function get_exam(){
     var p_id = 0;//document.getElementById("pat_id").value;
     var e_id = 1;//document.getElementById("pat_id").value;
@@ -138,6 +139,31 @@ function get_exam(){
     if(bool == false){
         document.getElementById("exam").innerHTML = "Cannot Find Name."
     }
+}
+ */
+function start_exam(){
+    var p_id = document.getElementById("pat_id").value;
+    var e_id = 1;//document.getElementById("pat_id").value;
+
+    var request = new XMLHttpRequest();
+    var url = "/exam_start/"+p_id;
+
+    let bool = false;
+    request.open("POST", url, true);
+    request.send();
+    request.onload = () => {
+        var exam = request.responseText;
+        // console.log(exam)
+        // console.log(exam.type)
+        // bool = true; 
+        // document.getElementById("max-velocity").innerHTML = exam[4];
+        // document.getElementById("max-angle").innerHTML = exam[3];
+        // document.getElementById("strength-class").innerHTML = exam[5];
+        // return exams;
+    }
+    // if(bool == false){
+    //     document.getElementById("exam").innerHTML = "Cannot Find Name."
+    // }
 }
 
 

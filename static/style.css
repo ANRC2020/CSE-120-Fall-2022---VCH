@@ -36,19 +36,27 @@
     margin-top: -6px;
 } */
 
-th,td{
-    border: 1px solid;
+th{
+    border: 2px solid;
     text-align:center;
-    
+    padding:5px;
+    background-color: darkgrey;
+}
+td{
+    border: 2px solid;
+    text-align:center;
+    padding:5px;
 }
 table{
-    border: 1px solid;
+    /* border: 2px solid; */
     margin: 50px;
+    
 }
 
 .form_info{
     border: 2px solid;
     margin: 50px;
+    
     
 }
 .form_entry{
